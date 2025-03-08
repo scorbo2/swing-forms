@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="swing-forms:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/swing_forms_jar</output-path>
+    <root id="root">
+      <element id="archive" name="swing-forms.jar">
+        <element id="module-output" name="swing-forms" />
+      </element>
+    </root>
+  </artifact>
+</component>
