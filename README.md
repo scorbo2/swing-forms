@@ -44,12 +44,8 @@ The code to generate a form with a simple text input field is quite simple:
 ```java
 FormPanel formPanel = new FormPanel();
 TextField textField = new TextField("Label:", 15, 1, true);
-formPanel.
-
-addFormField(textField);
-formPanel.
-
-render();
+formPanel.addFormField(textField);
+formPanel.render();
 ```
 
 The TextField constructor takes the following parameters:
