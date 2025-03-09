@@ -3,6 +3,7 @@ package ca.corbett.forms.demo;
 import ca.corbett.forms.Version;
 import ca.corbett.forms.demo.panels.AboutPanel;
 import ca.corbett.forms.demo.panels.BasicFormPanel;
+import ca.corbett.forms.demo.panels.CustomFieldPanel;
 import ca.corbett.forms.demo.panels.FormActionsPanel;
 import ca.corbett.forms.demo.panels.IntroPanel;
 import ca.corbett.forms.demo.panels.PanelBuilder;
@@ -41,6 +42,7 @@ public final class DemoFrame extends JFrame {
         panels.add(new BasicFormPanel());
         panels.add(new ValidationPanel());
         panels.add(new FormActionsPanel());
+        panels.add(new CustomFieldPanel());
         panels.add(new AboutPanel());
 
         setLayout(new BorderLayout());

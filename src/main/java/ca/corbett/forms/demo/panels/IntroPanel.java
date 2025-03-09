@@ -19,7 +19,7 @@ public class IntroPanel extends PanelBuilder {
 
     @Override
     public String getTitle() {
-        return "Introduction";
+        return "Intro";
     }
 
     @Override

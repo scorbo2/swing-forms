@@ -24,7 +24,7 @@ import java.util.List;
 public class BasicFormPanel extends PanelBuilder {
     @Override
     public String getTitle() {
-        return "Basic forms";
+        return "The basics";
     }
 
     @Override
