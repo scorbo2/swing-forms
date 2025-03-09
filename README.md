@@ -5,6 +5,27 @@ side projects. It's proven useful to me a few times, mainly in saving me from ha
 of manual GridBagLayout code, which I hate. With swing-forms you can very quickly stand up a form
 with optional validation rules and with customizable Actions on each form field.
 
+## Where do I get it?
+With Maven, you can just list it as a dependency:
+
+```xml
+<dependencies>
+  <dependency>
+    <groupId>ca.corbett</groupId>
+    <artifactId>swing-forms</artifactId>
+    <version>1.9.0</version>
+  </dependency>
+</dependencies>
+```
+
+Or, you can clone this repo and build it locally:
+
+```s
+git clone https://github.com/scorbo2/swing-forms.git
+cd swing-forms
+mvn package  # Generates executable jar and javadocs
+```
+
 ## What can I do with swing-forms?
 
 The swing-forms library wraps most of the common input components into easy-to-use
