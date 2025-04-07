@@ -13,7 +13,7 @@ With Maven, you can just list it as a dependency:
   <dependency>
     <groupId>ca.corbett</groupId>
     <artifactId>swing-forms</artifactId>
-    <version>1.9.0</version>
+    <version>1.9.1</version>
   </dependency>
 </dependencies>
 ```
@@ -377,3 +377,6 @@ swing-forms is made available under the MIT license: https://opensource.org/lice
 The swing-forms library was originally written in 2019 as part of the `sc-util` project but
 was not available on github until recently. Version `1.9.0` is the first publicly available
 version of the library.
+
+v1.9.1 [pending]
+- TODO issue list
