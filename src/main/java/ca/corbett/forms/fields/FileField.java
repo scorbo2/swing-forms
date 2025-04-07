@@ -240,6 +240,7 @@ public final class FileField extends FormField {
     // UTIL-147: create new button every time render() is invoked to avoid duplicate action listeners
     chooseButton = new JButton("Choose...");
     chooseButton.setFont(fieldLabelFont);
+    chooseButton.setEnabled(isEnabled);
 
     constraints.gridx = FormPanel.CONTROL_COLUMN;
     JPanel dirPanel = new JPanel();

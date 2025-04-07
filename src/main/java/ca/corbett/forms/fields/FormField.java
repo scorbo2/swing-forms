@@ -301,6 +301,10 @@ public abstract class FormField {
         validationLabel.setEnabled(enabled);
     }
 
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
     /**
      * Sets an internal String identifier for this field. Never shown to the user.
      *
