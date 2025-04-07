@@ -1,15 +1,16 @@
 package ca.corbett.forms.fields;
 
 import ca.corbett.forms.FormPanel;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.List;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 /**
  * A FormField wrapping a JComboBox.
@@ -20,12 +21,10 @@ import javax.swing.JPanel;
 public class ComboField extends FormField {
 
   private final JComboBox<String> comboBox;
-  private final ItemListener itemListener = new ItemListener() {
-    @Override
-    public void itemStateChanged(ItemEvent e) {
+  private final ItemListener itemListener = e -> {
+    if (e.getStateChange() == ItemEvent.SELECTED) {
       fireValueChangedEvent();
     }
-
   };
 
   /**
