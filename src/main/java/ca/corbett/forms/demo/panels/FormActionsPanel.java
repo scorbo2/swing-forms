@@ -46,7 +46,7 @@ public class FormActionsPanel extends PanelBuilder {
         List<String> options = new ArrayList<>();
         options.add("This option has no extra settings");
         options.add("This option has 1 extra setting");
-        options.add("This option has log of extra settings");
+        options.add("This option has lot of extra settings");
         mainComboField = new ComboField("Show/hide extra fields:", options, 0, false);
         formPanel.addFormField(mainComboField);
 
