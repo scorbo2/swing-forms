@@ -43,6 +43,10 @@ public final class FormPanel extends JPanel {
         public boolean isTopAligned() {
             return this == TOP_LEFT || this == TOP_CENTER;
         }
+
+        public boolean isCentered() {
+            return this == CENTER_LEFT || this == CENTER;
+        }
     }
 
     public static final int LABEL_COLUMN = 1;
@@ -97,6 +101,25 @@ public final class FormPanel extends JPanel {
      */
     public List<FormField> getFormFields() {
         return new ArrayList<>(formFields);
+    }
+
+    /**
+     * Finds and returns a specific FormField by its identifier, if it exists.
+     * No validation of FormField.identifier is done in this class! If more than
+     * one FormField has the same identifier, this method will return whichever
+     * one it finds first. If a field does not have an identifier, it will not
+     * be considered by this method.
+     *
+     * @param identifier The field identifier to search for.
+     * @return A FormField matching that identifier, or null if not found.
+     */
+    public FormField getFormField(String identifier) {
+        for (FormField candidate : formFields) {
+            if (candidate.getIdentifier() != null && candidate.getIdentifier().equals(identifier)) {
+                return candidate;
+            }
+        }
+        return null;
     }
 
     /**
@@ -172,6 +195,13 @@ public final class FormPanel extends JPanel {
      */
     public void setAlignment(Alignment alignment) {
         this.alignment = alignment;
+    }
+
+    /**
+     * Returns the Alignment property of this FormPanel.
+     */
+    public Alignment getAlignment() {
+        return alignment;
     }
 
     /**

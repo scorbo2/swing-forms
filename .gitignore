@@ -11,6 +11,7 @@ target/
 .idea/inspectionProfiles/
 .idea/tasks/
 .idea/httpRequests/
+.idea/jarRepositories.xml
 out/
 
 # Ignore logs and caches
