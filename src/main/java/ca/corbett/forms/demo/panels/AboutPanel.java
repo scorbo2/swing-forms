@@ -40,7 +40,7 @@ public class AboutPanel extends PanelBuilder {
         PanelField logoField = new PanelField();
         JPanel panel = logoField.getPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        URL url = getClass().getResource("/images/swing-forms-logo.jpg");
+        URL url = getClass().getResource("/ca/corbett/swing-forms/images/swing-forms-logo.jpg");
         ImageIcon logoImage = new ImageIcon(url);
         JLabel imageLabel = new JLabel(logoImage);
         imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -70,7 +70,7 @@ public class AboutPanel extends PanelBuilder {
         textArea.setRows(16);
         textArea.setEditable(false);
         try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/LICENSE")));
+            BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/ca/corbett/swing-forms/LICENSE")));
             StringBuilder sb = new StringBuilder();
             String line;
             while ((line = in.readLine()) != null) {

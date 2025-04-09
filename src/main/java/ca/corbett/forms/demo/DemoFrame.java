@@ -52,7 +52,7 @@ public final class DemoFrame extends JFrame {
         }
         add(tabPane, BorderLayout.CENTER);
 
-        URL url = getClass().getResource("/images/swing-forms-icon.jpg");
+        URL url = getClass().getResource("/ca/corbett/swing-forms/images/swing-forms-icon.jpg");
         if (url != null) {
             setIconImage(Toolkit.getDefaultToolkit().createImage(url));
         }

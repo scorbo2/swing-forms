@@ -96,11 +96,11 @@ public class FontStyleField extends FormField {
             selectedIndex = 0;
         }
 
-        URL urlB = getClass().getResource("/images/icon_b.png");
+        URL urlB = getClass().getResource("/ca/corbett/swing-forms/images/icon_b.png");
         iconB = (urlB == null) ? null : new ImageIcon(urlB);
-        URL urlI = getClass().getResource("/images/icon_i.png");
+        URL urlI = getClass().getResource("/ca/corbett/swing-forms/images/icon_i.png");
         iconI = (urlI == null) ? null : new ImageIcon(urlI);
-        URL urlU = getClass().getResource("/images/icon_u.png");
+        URL urlU = getClass().getResource("/ca/corbett/swing-forms/images/icon_u.png");
         iconU = (urlU == null) ? null : new ImageIcon(urlU);
 
         fieldLabel = new JLabel(label);

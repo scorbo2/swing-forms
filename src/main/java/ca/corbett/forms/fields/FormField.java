@@ -30,12 +30,12 @@ public abstract class FormField {
     /**
      * A reference to a checkmark icon for showing next to validated form fields. *
      */
-    protected static final URL validImageUrl = FormField.class.getResource("/images/formfield-valid.png");
+    protected static final URL validImageUrl = FormField.class.getResource("/ca/corbett/swing-forms/images/formfield-valid.png");
 
     /**
      * A reference to an X icon for showing next to invalid form fields. *
      */
-    protected static final URL invalidImageUrl = FormField.class.getResource("/images/formfield-invalid.png");
+    protected static final URL invalidImageUrl = FormField.class.getResource("/ca/corbett/swing-forms/images/formfield-invalid.png");
 
     /**
      * You can specify an Action(s) that will be invoked when the field value is modified. *
