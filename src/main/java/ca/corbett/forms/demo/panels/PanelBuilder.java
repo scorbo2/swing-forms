@@ -1,9 +1,6 @@
 package ca.corbett.forms.demo.panels;
 
-import ca.corbett.forms.fields.LabelField;
-
 import javax.swing.JPanel;
-import java.awt.Font;
 
 /**
  * Provides an easy abstract way to create new demo panels and load them into the DemoFrame.
@@ -27,17 +24,4 @@ public abstract class PanelBuilder {
      */
     public abstract JPanel build();
 
-    /**
-     * A shorthand method for creating labels with a consistent margin and font size.
-     *
-     * @param text The text for the label.
-     */
-    protected LabelField createSimpleLabelField(String text) {
-        LabelField field = new LabelField(text);
-        field.setMargins(2, 2, 2, 2, 0);
-        field.setExtraMargins(0, 0);
-        field.setFieldLabelFont(new Font("SansSerif", Font.PLAIN, 14));
-        field.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        return field;
-    }
 }

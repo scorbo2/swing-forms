@@ -17,9 +17,10 @@ public class CustomFieldPanel extends PanelBuilder {
     public JPanel build() {
         FormPanel formPanel = new FormPanel();
 
-        LabelField headerLabel = createSimpleLabelField("Creating a custom FormField implementation");
+        LabelField headerLabel = new LabelField("Creating a custom FormField implementation");
         headerLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
-        headerLabel.setExtraMargins(24, 24);
+        headerLabel.setTopMargin(24);
+        headerLabel.setBottomMargin(24);
         formPanel.addFormField(headerLabel);
 
         String text = "<html>Sometimes the built-in form field components just aren't<br/>"
@@ -27,7 +28,7 @@ public class CustomFieldPanel extends PanelBuilder {
                 + "Here is an example of a custom font style field<br/>"
                 + "that allows the user to select various font properties<br/>"
                 + "all in one single FormField:</html>";
-        headerLabel = createSimpleLabelField(text);
+        headerLabel = LabelField.createPlainHeaderLabel(text);
         formPanel.addFormField(headerLabel);
 
         FontStyleField fontField = new FontStyleField("Font:");
@@ -35,7 +36,7 @@ public class CustomFieldPanel extends PanelBuilder {
         fontField.setBottomMargin(12);
         formPanel.addFormField(fontField);
 
-        headerLabel = createSimpleLabelField("Full source code for this component is included!");
+        headerLabel = LabelField.createPlainHeaderLabel("Full source code for this component is included!");
         formPanel.addFormField(headerLabel);
 
         formPanel.render();

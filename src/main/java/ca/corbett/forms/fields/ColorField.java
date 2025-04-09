@@ -37,7 +37,6 @@ public class ColorField extends FormField {
     // Initialize our UI components:
     fieldLabel = new JLabel(label);
     fieldLabel.setFont(fieldLabelFont);
-    validationLabel = new JLabel();
     colorPanel = new JPanel();
     fieldComponent = colorPanel;
     colorPanel.setPreferredSize(new Dimension(30, 20));
@@ -93,14 +92,9 @@ public class ColorField extends FormField {
     fieldLabel.setFont(fieldLabelFont);
     container.add(fieldLabel, constraints);
 
-    constraints.gridx++;
+    constraints.gridx = FormPanel.CONTROL_COLUMN;
     constraints.anchor = GridBagConstraints.WEST;
     constraints.insets = new Insets(topMargin, componentSpacing, bottomMargin, componentSpacing);
     container.add(colorPanel, constraints);
-
-    constraints.insets = new Insets(0, 0, 0, rightMargin);
-    constraints.gridx++;
-    container.add(validationLabel, constraints);
   }
-
 }

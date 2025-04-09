@@ -52,7 +52,6 @@ public final class FontField extends FormField {
         sampleLabel = new JLabel();
         setSelectedFont(selectedFont);
         fieldComponent = button;
-        validationLabel = new JLabel();
     }
 
     /**
@@ -109,11 +108,6 @@ public final class FontField extends FormField {
         constraints.fill = 0;
         constraints.insets = new Insets(topMargin, componentSpacing, bottomMargin, componentSpacing);
         container.add(wrapper, constraints);
-
-        constraints.insets = new Insets(0, 0, 0, rightMargin);
-        constraints.fill = 0;
-        constraints.gridx = FormPanel.VALIDATION_COLUMN;
-        container.add(validationLabel, constraints);
     }
 
     private ActionListener getActionListener(final JPanel panel) {

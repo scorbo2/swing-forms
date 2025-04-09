@@ -36,9 +36,10 @@ public class FormActionsPanel extends PanelBuilder {
 
     @Override
     public JPanel build() {
-        LabelField headerLabel = createSimpleLabelField("Form fields can have customizable Actions:");
+        LabelField headerLabel = new LabelField("Form fields can have customizable Actions:");
         headerLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
-        headerLabel.setExtraMargins(24, 24);
+        headerLabel.setTopMargin(24);
+        headerLabel.setBottomMargin(24);
         formPanel.addFormField(headerLabel);
 
         formPanel.addFormField(buildAlignmentChooser());

@@ -21,7 +21,7 @@ import java.util.Map;
  * user interaction. This can either be presented as a label:text pair,
  * like a non-editable form field, or as a single label that spans the width
  * of the form, like a section header. Convenience methods are exposed here
- * so you can control the font and oolour of the label text. (You could also
+ * so you can control the font and colour of the label text. (You could also
  * do this by invoking getFieldComponent() from the FormField parent class
  * and casting it to a JLabel, but the convenience methods here are easier).
  * To reduce confusion, the terminology is as follows: (fieldLabel):(labelText),
@@ -29,8 +29,7 @@ import java.util.Map;
  * also be hidden).
  * <p>
  * Note that label fields ignore validation, as there's no user input to validate.
- * So, the validationLabel is created here to avoid NPEs in the parent class, but
- * it is never shown.</p>
+ * </p>
  * <p>
  * You can make a multiline label by wrapping the label text in html tags:
  * </p>
@@ -42,9 +41,10 @@ import java.util.Map;
  */
 public final class LabelField extends FormField {
 
+  private static final Font DEFAULT_HEADER_FONT = new Font(Font.DIALOG, Font.BOLD, 16);
+  private static final Font DEFAULT_LABEL_FONT = new Font(Font.DIALOG, Font.PLAIN, 12);
+
   private final JLabel label;
-  private int extraTopMargin;
-  private int extraBottomMargin;
   private Action hyperlinkAction;
   private Font font;
   private Color color;
@@ -75,10 +75,38 @@ public final class LabelField extends FormField {
     this.fieldLabel = new JLabel(fieldLabel);
     this.fieldLabel.setFont(fieldLabelFont);
     fieldComponent = label;
-    validationLabel = new JLabel();
     showValidationLabel = false;
-    extraTopMargin = isHeaderLabel() ? 10 : 0;
-    extraBottomMargin = isHeaderLabel() ? 8 : 0;
+  }
+
+  /**
+   * A static convenience factory method to create a bold header label with sensible
+   * defaults for a section header label. The default values are 16 point bold black
+   * text with a slightly larger top and bottom margin.
+   *
+   * @param text The label text
+   * @return A LabelField suitable for use as a header.
+   */
+  public static LabelField createBoldHeaderLabel(String text) {
+    LabelField label = new LabelField(text);
+    label.setFont(DEFAULT_HEADER_FONT);
+    label.setTopMargin(label.getTopMargin() + 10);
+    return label;
+  }
+
+  /**
+   * A static convenience factory method to create a "normal" header label with sensible
+   * defaults for a form label. The default values are 12 point plain black text
+   * with an extra 4 pixel top and bottom margin.
+   *
+   * @param text The label text
+   * @return A LabelField suitable for use as a regular header label.
+   */
+  public static LabelField createPlainHeaderLabel(String text) {
+    LabelField label = new LabelField(text);
+    label.setFont(DEFAULT_LABEL_FONT);
+    label.setTopMargin(label.getTopMargin() + 4);
+    label.setBottomMargin(label.getBottomMargin() + 4);
+    return label;
   }
 
   /**
@@ -99,18 +127,6 @@ public final class LabelField extends FormField {
    */
   public boolean isHyperlinked() {
     return hyperlinkAction != null;
-  }
-
-  /**
-   * Sets the optional extra top and bottom margins to apply in the case of
-   * a header label (see isHeaderLabel).
-   *
-   * @param extraTop Margin to apply above the label (in addition to regular top margin).
-   * @param extraBottom Margin to apply below the label (in addition to regular bottom margin).
-   */
-  public void setExtraMargins(int extraTop, int extraBottom) {
-    extraTopMargin = extraTop;
-    extraBottomMargin = extraBottom;
   }
 
   /**
@@ -209,26 +225,19 @@ public final class LabelField extends FormField {
     if (!isHeaderLabel()) {
       constraints.gridx = FormPanel.LABEL_COLUMN;
       constraints.gridwidth = 1;
-      constraints.insets = new Insets(topMargin + extraTopMargin, leftMargin, bottomMargin + extraBottomMargin, componentSpacing);
+      constraints.insets = new Insets(topMargin, leftMargin, bottomMargin, componentSpacing);
       fieldLabel.setFont(fieldLabelFont);
       container.add(fieldLabel, constraints);
-      constraints.gridx = constraints.gridx + 1;
-      constraints.insets = new Insets(topMargin + extraTopMargin, componentSpacing, bottomMargin + extraBottomMargin, componentSpacing);
+      constraints.gridx = FormPanel.CONTROL_COLUMN;
+      constraints.insets = new Insets(topMargin, componentSpacing, bottomMargin, componentSpacing);
     }
     else {
       constraints.gridx = FormPanel.LABEL_COLUMN;
       constraints.gridwidth = 2;
-      constraints.insets = new Insets(topMargin + extraTopMargin, leftMargin, bottomMargin + extraBottomMargin, componentSpacing);
+      constraints.insets = new Insets(topMargin, leftMargin, bottomMargin, componentSpacing);
     }
 
     label.setFont(font);
     container.add(label, constraints);
-
-    constraints.insets = new Insets(topMargin + extraTopMargin, 0, bottomMargin + extraBottomMargin, rightMargin);
-    constraints.fill = GridBagConstraints.NONE;
-    constraints.gridx = FormPanel.VALIDATION_COLUMN;
-    constraints.gridwidth = 1;
-    container.add(validationLabel, constraints);
   }
-
 }

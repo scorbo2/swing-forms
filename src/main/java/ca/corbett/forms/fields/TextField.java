@@ -4,6 +4,7 @@ import ca.corbett.forms.FormPanel;
 import ca.corbett.forms.validators.NonBlankFieldValidator;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -70,7 +71,6 @@ public final class TextField extends FormField {
   public TextField(String label, int cols, int rows, boolean allowBlank) {
     fieldLabel = new JLabel(label);
     fieldLabel.setFont(fieldLabelFont);
-    validationLabel = new JLabel();
     if (rows > 1) {
       textComponent = new JTextArea(rows, cols);
       ((JTextArea)textComponent).setLineWrap(true);
@@ -95,6 +95,7 @@ public final class TextField extends FormField {
     addScrollPaneWhenMultiLine = true;
     scrollPaneWidth = -1;
     scrollPaneHeight = -1;
+    isExtraLabelRenderedByField = true;
   }
 
   /**
@@ -189,8 +190,21 @@ public final class TextField extends FormField {
     container.add(fieldLabel, constraints);
 
     if (multiLine) {
+      if (!helpText.isBlank()) {
+        constraints.gridx = FormPanel.HELP_COLUMN;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.insets = new Insets(topMargin, componentSpacing, componentSpacing, componentSpacing);
+        if (FormPanel.helpImageUrl != null) {
+          helpLabel.setIcon(new ImageIcon(FormPanel.helpImageUrl));
+        }
+        helpLabel.setToolTipText(helpText);
+        container.add(helpLabel, constraints);
+      }
+
+
       if (expandMultiLineHorizontally) {
-        constraints.insets = new Insets(0, 0, 0, rightMargin);
+        constraints.insets = new Insets(topMargin, componentSpacing, componentSpacing, rightMargin);
         constraints.gridwidth = 1;
         constraints.fill = GridBagConstraints.NONE;
         constraints.gridx = FormPanel.VALIDATION_COLUMN;
@@ -198,7 +212,7 @@ public final class TextField extends FormField {
       }
 
       constraints.gridx = FormPanel.LABEL_COLUMN;
-      constraints.gridwidth = expandMultiLineHorizontally ? 3 : 2;
+      constraints.gridwidth = expandMultiLineHorizontally ? 4 : 2;
       constraints.gridy = constraints.gridy + 1;
       if (scrollPaneWidth > 0 && scrollPaneHeight > 0) {
         constraints.fill = GridBagConstraints.NONE;
@@ -224,7 +238,6 @@ public final class TextField extends FormField {
 
       if (!expandMultiLineHorizontally) {
         constraints.insets = new Insets(0, 0, 0, rightMargin);
-        constraints.gridwidth = 1;
         constraints.fill = GridBagConstraints.NONE;
         constraints.gridx = FormPanel.VALIDATION_COLUMN;
         constraints.anchor = GridBagConstraints.NORTHWEST;
@@ -238,7 +251,19 @@ public final class TextField extends FormField {
       constraints.gridx = FormPanel.CONTROL_COLUMN;
       container.add(textComponent, constraints);
 
-      constraints.insets = new Insets(0, 0, 0, rightMargin);
+      if (!helpText.isBlank()) {
+        constraints.gridx = FormPanel.HELP_COLUMN;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.insets = new Insets(topMargin, componentSpacing, bottomMargin, componentSpacing);
+        if (FormPanel.helpImageUrl != null) {
+          helpLabel.setIcon(new ImageIcon(FormPanel.helpImageUrl));
+        }
+        helpLabel.setToolTipText(helpText);
+        container.add(helpLabel, constraints);
+      }
+
+      constraints.insets = new Insets(topMargin, componentSpacing, bottomMargin, rightMargin);
       constraints.gridwidth = 1;
       constraints.fill = GridBagConstraints.NONE;
       constraints.gridx = FormPanel.VALIDATION_COLUMN;

@@ -48,15 +48,15 @@ public class AboutPanel extends PanelBuilder {
         aboutPanel.addFormField(logoField);
 
         String labelText = Version.FULL_NAME;
-        LabelField labelField = createSimpleLabelField(labelText);
+        LabelField labelField = new LabelField(labelText);
         labelField.setFont(new Font("SansSerif", Font.BOLD, 24));
         labelField.setLeftMargin(14);
         aboutPanel.addFormField(labelField);
 
-        labelField = createSimpleLabelField(Version.COPYRIGHT);
+        labelField = LabelField.createPlainHeaderLabel(Version.COPYRIGHT);
         labelField.setLeftMargin(14);
         aboutPanel.addFormField(labelField);
-        labelField = createSimpleLabelField(Version.PROJECT_URL);
+        labelField = LabelField.createPlainHeaderLabel(Version.PROJECT_URL);
         labelField.setLeftMargin(14);
         labelField.setBottomMargin(20);
         aboutPanel.addFormField(labelField);

@@ -20,7 +20,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -47,13 +46,7 @@ public class FontStyleField extends FormField {
     private ImageIcon iconI;
     private ImageIcon iconU;
 
-    private final ItemListener itemListener = new ItemListener() {
-        @Override
-        public void itemStateChanged(ItemEvent e) {
-            fireValueChangedEvent();
-        }
-
-    };
+    private final ItemListener itemListener = e -> fireValueChangedEvent();
 
     private final MouseListener colorButtonMouseListener = new MouseAdapter() {
         @Override
@@ -69,12 +62,7 @@ public class FontStyleField extends FormField {
         }
     };
 
-    private final ChangeListener fontButtonChangeListener = new ChangeListener() {
-        @Override
-        public void stateChanged(ChangeEvent e) {
-            fireValueChangedEvent();
-        }
-    };
+    private final ChangeListener fontButtonChangeListener = e -> fireValueChangedEvent();
 
     public FontStyleField(String label) {
         this(label, "SansSerif", false, false, false);
@@ -145,7 +133,6 @@ public class FontStyleField extends FormField {
         });
         wrapperPanel.add(sizeSpinner);
         fieldComponent = wrapperPanel;
-        validationLabel = new JLabel();
     }
 
     public String getFontName() {
@@ -218,10 +205,5 @@ public class FontStyleField extends FormField {
         constraints.gridx = FormPanel.CONTROL_COLUMN;
         constraints.insets = new Insets(topMargin, componentSpacing, bottomMargin, componentSpacing);
         container.add(wrapperPanel, constraints);
-
-        constraints.gridx = FormPanel.VALIDATION_COLUMN;
-        constraints.insets = new Insets(0, 0, 0, rightMargin);
-        container.add(validationLabel, constraints);
     }
-
 }

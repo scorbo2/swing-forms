@@ -7,8 +7,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 /**
  * A FormField to wrap a JCheckBox.
@@ -29,14 +27,7 @@ public final class CheckBoxField extends FormField {
     fieldLabel.setFont(fieldLabelFont);
     fieldComponent = new JCheckBox(labelText, isChecked);
     fieldComponent.setFont(fieldLabelFont);
-    ((JCheckBox)fieldComponent).addItemListener(new ItemListener() {
-      @Override
-      public void itemStateChanged(ItemEvent e) {
-        fireValueChangedEvent();
-      }
-
-    });
-    validationLabel = new JLabel();
+    ((JCheckBox) fieldComponent).addItemListener(e -> fireValueChangedEvent());
     showValidationLabel = false;
   }
 
@@ -60,11 +51,5 @@ public final class CheckBoxField extends FormField {
     constraints.fill = GridBagConstraints.NONE;
     fieldComponent.setFont(fieldLabelFont);
     container.add(fieldComponent, constraints);
-
-    constraints.gridx = FormPanel.VALIDATION_COLUMN;
-    constraints.gridwidth = 1;
-    constraints.insets = new Insets(0, 0, 0, rightMargin);
-    container.add(validationLabel, constraints);
   }
-
 }

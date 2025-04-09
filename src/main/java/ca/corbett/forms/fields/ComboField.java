@@ -44,7 +44,6 @@ public class ComboField extends FormField {
     comboBox.setEditable(isEditable);
     comboBox.addItemListener(itemListener);
     fieldComponent = comboBox;
-    validationLabel = new JLabel();
     showValidationLabel = false;
   }
 
@@ -112,10 +111,6 @@ public class ComboField extends FormField {
     constraints.gridx = FormPanel.CONTROL_COLUMN;
     constraints.insets = new Insets(topMargin, componentSpacing, bottomMargin, componentSpacing);
     container.add(comboBox, constraints);
-
-    constraints.gridx = FormPanel.VALIDATION_COLUMN;
-    constraints.insets = new Insets(0, 0, 0, rightMargin);
-    container.add(validationLabel, constraints);
   }
 
 }

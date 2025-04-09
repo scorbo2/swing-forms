@@ -18,8 +18,6 @@ import javax.swing.filechooser.FileFilter;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 
 /**
@@ -86,7 +84,6 @@ public final class FileField extends FormField {
     textField.setColumns(cols);
     fileChooser = new JFileChooser(initialValue);
     fileChooser.setMultiSelectionEnabled(false);
-    validationLabel = new JLabel();
     setSelectionType(selectionType, allowBlank);
   }
 
@@ -252,25 +249,16 @@ public final class FileField extends FormField {
     chooseButton.setPreferredSize(new Dimension(105, 22));
     dirPanel.add(chooseButton);
     final JPanel thisPanel = container;
-    chooseButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        int result = fileChooser.showDialog(thisPanel, "Choose");
-        if (result == JFileChooser.APPROVE_OPTION) {
-          textField.setText(fileChooser.getSelectedFile().getAbsolutePath());
-          fireValueChangedEvent();
-        }
+    chooseButton.addActionListener(e -> {
+      int result = fileChooser.showDialog(thisPanel, "Choose");
+      if (result == JFileChooser.APPROVE_OPTION) {
+        textField.setText(fileChooser.getSelectedFile().getAbsolutePath());
+        fireValueChangedEvent();
       }
-
     });
     constraints.fill = GridBagConstraints.BOTH;
     constraints.insets = new Insets(topMargin, componentSpacing, bottomMargin, componentSpacing);
     container.add(dirPanel, constraints);
-
-    constraints.insets = new Insets(0, 0, 0, rightMargin);
-    constraints.fill = 0;
-    constraints.gridx = FormPanel.VALIDATION_COLUMN;
-    container.add(validationLabel, constraints);
   }
 
 }
