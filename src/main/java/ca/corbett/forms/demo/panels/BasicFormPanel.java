@@ -1,12 +1,10 @@
 package ca.corbett.forms.demo.panels;
 
-import ca.corbett.forms.FontDialog;
 import ca.corbett.forms.FormPanel;
 import ca.corbett.forms.fields.CheckBoxField;
 import ca.corbett.forms.fields.ColorField;
 import ca.corbett.forms.fields.ComboField;
 import ca.corbett.forms.fields.FileField;
-import ca.corbett.forms.fields.FontField;
 import ca.corbett.forms.fields.LabelField;
 import ca.corbett.forms.fields.NumberField;
 import ca.corbett.forms.fields.TextField;
@@ -52,7 +50,6 @@ public class BasicFormPanel extends PanelBuilder {
         formPanel.addFormField(new FileField("File chooser:", null, 15, FileField.SelectionType.ExistingFile));
         formPanel.addFormField(new FileField("Directory chooser:", null, 15, FileField.SelectionType.ExistingDirectory));
         formPanel.addFormField(new NumberField("Number chooser:", 0, 0, 100, 1));
-        formPanel.addFormField(new FontField("Font chooser:", FontDialog.INITIAL_FONT, Color.WHITE, Color.BLACK));
 
         formPanel.render();
         return formPanel;

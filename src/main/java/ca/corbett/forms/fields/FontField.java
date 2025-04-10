@@ -174,12 +174,12 @@ public final class FontField extends FormField {
         constraints.gridx = FormPanel.CONTROL_COLUMN;
         button.setPreferredSize(new Dimension(95, 23));
         button.setFont(selectedFont.deriveFont(12f));
-        JPanel wrapper = new JPanel();
-        wrapper.setBackground(container.getBackground());
-        wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.X_AXIS));
-        wrapper.add(sampleLabel);
-        wrapper.add(new JLabel(" ")); // spacer
-        wrapper.add(button);
+        JPanel wrapperPanel = new JPanel();
+        wrapperPanel.setBackground(container.getBackground());
+        wrapperPanel.setLayout(new BoxLayout(wrapperPanel, BoxLayout.X_AXIS));
+        wrapperPanel.add(sampleLabel);
+        wrapperPanel.add(new JLabel(" ")); // spacer
+        wrapperPanel.add(button);
 
         if (actionListener != null) {
             button.removeActionListener(actionListener);
@@ -189,7 +189,7 @@ public final class FontField extends FormField {
 
         constraints.fill = 0;
         constraints.insets = new Insets(topMargin, componentSpacing, bottomMargin, componentSpacing);
-        container.add(wrapper, constraints);
+        container.add(wrapperPanel, constraints);
     }
 
     /**
