@@ -380,3 +380,8 @@ version of the library.
 
 v1.9.1 [pending]
 - TODO issue list
+
+TODO update README for FontField
+While you're at it, delete FontStyleField
+TODO add color as an option for FontField
+  (background+foreground? or just foreground?)

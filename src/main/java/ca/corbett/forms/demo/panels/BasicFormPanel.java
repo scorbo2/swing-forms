@@ -52,7 +52,7 @@ public class BasicFormPanel extends PanelBuilder {
         formPanel.addFormField(new FileField("File chooser:", null, 15, FileField.SelectionType.ExistingFile));
         formPanel.addFormField(new FileField("Directory chooser:", null, 15, FileField.SelectionType.ExistingDirectory));
         formPanel.addFormField(new NumberField("Number chooser:", 0, 0, 100, 1));
-        formPanel.addFormField(new FontField("Font chooser:", FontDialog.INITIAL_FONT));
+        formPanel.addFormField(new FontField("Font chooser:", FontDialog.INITIAL_FONT, Color.WHITE, Color.BLACK));
 
         formPanel.render();
         return formPanel;
