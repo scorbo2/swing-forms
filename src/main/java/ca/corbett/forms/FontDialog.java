@@ -50,6 +50,7 @@ public final class FontDialog extends JDialog {
     private ComboField typeField;
     private ComboField styleField;
     private NumberField sizeField;
+    private boolean showSizeField = true;
     private LabelField sampleLabel;
     private ColorField textColorField;
     private ColorField bgColorField;
@@ -95,6 +96,25 @@ public final class FontDialog extends JDialog {
         super((getParentObject(owner) instanceof Window) ? (Window) getParentObject(owner) : (Frame) null, "Choose font");
         initComponents(initialFont == null ? INITIAL_FONT : initialFont, textColor, bgColor);
         setLocationRelativeTo((Component) getParentObject(owner));
+    }
+
+    /**
+     * Reports whether the size field is visible on this dialog.
+     * The size field is optional and the visibility can be set
+     * before the dialog is shown, with setSizeFieldVisible().
+     */
+    public boolean isShowSizeField() {
+        return showSizeField;
+    }
+
+    /**
+     * Toggles the visibility of the size chooser - this must be
+     * set before the dialog is shown. Some use cases require the
+     * setting of just the font face and style, without size.
+     */
+    public void setShowSizeField(boolean show) {
+        showSizeField = show;
+        sizeField.setVisible(show);
     }
 
     /**

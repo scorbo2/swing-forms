@@ -32,8 +32,11 @@ public class CustomFieldPanel extends PanelBuilder {
         headerLabel = LabelField.createPlainHeaderLabel(text);
         formPanel.addFormField(headerLabel);
 
-        FontField fontField = new FontField("Basic font chooser:");
+        FontField fontField = new FontField("Just font, no size:");
+        fontField.setShowSizeField(false);
         fontField.setTopMargin(8);
+        formPanel.addFormField(fontField);
+        fontField = new FontField("Both font and size:");
         formPanel.addFormField(fontField);
 
         formPanel.addFormField(new FontField("Font and text color:", FontDialog.INITIAL_FONT, Color.RED));

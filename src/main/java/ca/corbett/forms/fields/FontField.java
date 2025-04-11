@@ -33,6 +33,7 @@ public final class FontField extends FormField {
     private Font selectedFont;
     private Color textColor;
     private Color bgColor;
+    private boolean showSizeField = true;
 
     /**
      * Creates a FontField with the given label text and default initial settings.
@@ -87,6 +88,22 @@ public final class FontField extends FormField {
         sampleLabel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         setSelectedFont(selectedFont);
         fieldComponent = button;
+    }
+
+    /**
+     * Controls the visibility of the size chooser on the popup font chooser dialog.
+     * This must be set before the field is rendered. Some use cases require
+     * choosing just the font and not also the size.
+     */
+    public void setShowSizeField(boolean show) {
+        showSizeField = show;
+    }
+
+    /**
+     * Reports whether or not the size chooser is visible in this field.
+     */
+    public boolean isShowSizeField() {
+        return showSizeField;
     }
 
     /**
@@ -173,7 +190,7 @@ public final class FontField extends FormField {
 
         constraints.gridx = FormPanel.CONTROL_COLUMN;
         button.setPreferredSize(new Dimension(95, 23));
-        button.setFont(selectedFont.deriveFont(12f));
+        button.setFont(button.getFont().deriveFont(Font.PLAIN));
         JPanel wrapperPanel = new JPanel();
         wrapperPanel.setBackground(container.getBackground());
         wrapperPanel.setLayout(new BoxLayout(wrapperPanel, BoxLayout.X_AXIS));
@@ -218,6 +235,7 @@ public final class FontField extends FormField {
             @Override
             public void actionPerformed(ActionEvent e) {
                 FontDialog dialog = new FontDialog(panel, selectedFont, textColor, bgColor);
+                dialog.setShowSizeField(showSizeField);
                 dialog.setVisible(true);
                 if (dialog.wasOkayed()) {
                     setSelectedFont(dialog.getSelectedFont());
