@@ -388,10 +388,12 @@ The swing-forms library was originally written in 2019 as part of the `sc-util` 
 was not available on github until recently. Version `1.9.0` is the first publicly available
 version of the library.
 
-v1.9.1 [pending TODO add release date]
+v1.9.1 [2025-05-10]
 - https://github.com/scorbo2/swing-forms/issues/1 - Replace FontStyleField with FontField, which is better
 - https://github.com/scorbo2/swing-forms/issues/2 - Add getFormField(id) to FormPanel
 - https://github.com/scorbo2/swing-forms/issues/3 - (bug) FieldField.setEnabled() not working properly
 - https://github.com/scorbo2/swing-forms/issues/4 - (bug) ComboField is using ItemListener carelessly
 - https://github.com/scorbo2/swing-forms/issues/5 - Add an optional "?" icon for help text to each field
 - https://github.com/scorbo2/swing-forms/issues/7 - PanelField should allow for validation
+- https://github.com/scorbo2/swing-forms/issues/8 - updated README instructional guide
+- https://github.com/scorbo2/swing-forms/issues/10 - FontField has optional size
