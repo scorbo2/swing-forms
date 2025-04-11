@@ -1,9 +1,7 @@
 package ca.corbett.forms.fields;
 
 import ca.corbett.forms.FormPanel;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -11,6 +9,9 @@ import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 /**
  * A FormField that wraps a JSpinner to allow numeric input.
@@ -70,7 +71,6 @@ public final class NumberField extends FormField {
     fieldComponent = spinner;
     fieldComponent.setPreferredSize(new Dimension(60, 22)); // arbitrary default value
     fieldLabel = new JLabel(labelText);
-    validationLabel = new JLabel();
   }
 
   public Number getCurrentValue() {
@@ -92,11 +92,5 @@ public final class NumberField extends FormField {
     constraints.gridx = FormPanel.CONTROL_COLUMN;
     constraints.insets = new Insets(topMargin, componentSpacing, bottomMargin, componentSpacing);
     container.add(fieldComponent, constraints);
-
-    constraints.insets = new Insets(0, 0, 0, rightMargin);
-    constraints.fill = 0;
-    constraints.gridx = FormPanel.VALIDATION_COLUMN;
-    container.add(validationLabel, constraints);
   }
-
 }

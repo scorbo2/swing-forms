@@ -5,6 +5,7 @@ import ca.corbett.forms.demo.panels.AboutPanel;
 import ca.corbett.forms.demo.panels.BasicFormPanel;
 import ca.corbett.forms.demo.panels.CustomFieldPanel;
 import ca.corbett.forms.demo.panels.FormActionsPanel;
+import ca.corbett.forms.demo.panels.HelpPanel;
 import ca.corbett.forms.demo.panels.IntroPanel;
 import ca.corbett.forms.demo.panels.PanelBuilder;
 import ca.corbett.forms.demo.panels.ValidationPanel;
@@ -43,6 +44,7 @@ public final class DemoFrame extends JFrame {
         panels.add(new ValidationPanel());
         panels.add(new FormActionsPanel());
         panels.add(new CustomFieldPanel());
+        panels.add(new HelpPanel());
         panels.add(new AboutPanel());
 
         setLayout(new BorderLayout());
@@ -52,7 +54,7 @@ public final class DemoFrame extends JFrame {
         }
         add(tabPane, BorderLayout.CENTER);
 
-        URL url = getClass().getResource("/images/swing-forms-icon.jpg");
+        URL url = getClass().getResource("/ca/corbett/swing-forms/images/swing-forms-icon.jpg");
         if (url != null) {
             setIconImage(Toolkit.getDefaultToolkit().createImage(url));
         }

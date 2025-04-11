@@ -31,9 +31,10 @@ public class BasicFormPanel extends PanelBuilder {
     public JPanel build() {
         FormPanel formPanel = new FormPanel();
 
-        LabelField headerLabel = createSimpleLabelField("Looking for basic Swing components? No problem!");
+        LabelField headerLabel = new LabelField("Looking for basic Swing components? No problem!");
         headerLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
-        headerLabel.setExtraMargins(24, 24);
+        headerLabel.setTopMargin(24);
+        headerLabel.setBottomMargin(24);
         formPanel.addFormField(headerLabel);
 
         formPanel.addFormField(new TextField("Single-line text:", 15, 1, true));
@@ -42,9 +43,8 @@ public class BasicFormPanel extends PanelBuilder {
         formPanel.addFormField(buildComboField());
         formPanel.addFormField(new ColorField("Color chooser:", Color.BLUE));
 
-        LabelField labelField = createSimpleLabelField("Label fields like this don't allow input, but can help organize the form.");
+        LabelField labelField = LabelField.createPlainHeaderLabel("Label fields like this don't allow input, but can help organize the form.");
         labelField.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        labelField.setExtraMargins(24, 24);
         formPanel.addFormField(labelField);
 
         formPanel.addFormField(new FileField("File chooser:", null, 15, FileField.SelectionType.ExistingFile));

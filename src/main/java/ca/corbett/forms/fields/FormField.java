@@ -30,12 +30,12 @@ public abstract class FormField {
     /**
      * A reference to a checkmark icon for showing next to validated form fields. *
      */
-    protected static final URL validImageUrl = FormField.class.getResource("/images/formfield-valid.png");
+    protected static final URL validImageUrl = FormField.class.getResource("/ca/corbett/swing-forms/images/formfield-valid.png");
 
     /**
      * A reference to an X icon for showing next to invalid form fields. *
      */
-    protected static final URL invalidImageUrl = FormField.class.getResource("/images/formfield-invalid.png");
+    protected static final URL invalidImageUrl = FormField.class.getResource("/ca/corbett/swing-forms/images/formfield-invalid.png");
 
     /**
      * You can specify an Action(s) that will be invoked when the field value is modified. *
@@ -70,7 +70,28 @@ public abstract class FormField {
     /**
      * A JLabel component to show the validation results for this field. *
      */
-    protected JLabel validationLabel;
+    protected final JLabel validationLabel = new JLabel();
+
+    /**
+     * Most of the time, the FormPanel itself can deal with the rendering of
+     * the validation and help labels, and individual FormField implementations
+     * don't need to worry about it. But, some fields (like multi-line text
+     * fields for example) want to render the extra labels themselves in
+     * a nonstandard way. So, if a FormField implementation sets this flag
+     * to true, the FormPanel will leave the rendering of the validation
+     * and help labels up to the FormField.
+     */
+    protected boolean isExtraLabelRenderedByField = false;
+
+    /**
+     * A JLabel to show help text for this field.
+     */
+    protected final JLabel helpLabel = new JLabel();
+
+    /**
+     * Optional help text for this field.
+     */
+    protected String helpText = "";
 
     /**
      * Margin to apply above the field. *
@@ -100,7 +121,7 @@ public abstract class FormField {
 
     /**
      * Whether to show or hide the validation label (makes no sense for some components, like labels
-     * or checkboxes) *
+     * or checkboxes)
      */
     protected boolean showValidationLabel = true;
 
@@ -189,6 +210,60 @@ public abstract class FormField {
      */
     public boolean getShowValidationLabel() {
         return showValidationLabel;
+    }
+
+    /**
+     * Most of the time, the FormPanel itself can deal with the rendering of
+     * the validation and help labels, and individual FormField implementations
+     * don't need to worry about it. But, some fields (like multi-line text
+     * fields for example) want to render the extra labels themselves in
+     * a nonstandard way. So, if a FormField implementation sets this flag
+     * to true, the FormPanel will leave the rendering of the validation
+     * and help labels up to the FormField.
+     */
+    public boolean isExtraLabelRenderedByField() {
+        return isExtraLabelRenderedByField;
+    }
+
+    /**
+     * Returns the validation label for this FormField.
+     * This is needed by FormPanel in the render() method.
+     *
+     * @return A JLabel.
+     */
+    public JLabel getValidationLabel() {
+        return validationLabel;
+    }
+
+    /**
+     * Returns the help text associated with this field, if any is set.
+     *
+     * @return Help text for this field, or an empty string if no help text is set.
+     */
+    public String getHelpText() {
+        return helpText;
+    }
+
+    /**
+     * Sets optional help text for this field. If present, the field may show
+     * the helpLabel to allow the user to get help for the field. Note that
+     * some fields may decide not to render the helpLabel even if helpText
+     * is set for the field. It's up to each FormField implementation.
+     *
+     * @param helpText The help text to show, or null for no help text.
+     */
+    public void setHelpText(String helpText) {
+        this.helpText = (helpText == null) ? "" : helpText;
+    }
+
+    /**
+     * Returns the help label for this FormField.
+     * This is needed by FormPanel in the render() method.
+     *
+     * @return A JLabel.
+     */
+    public JLabel getHelpLabel() {
+        return helpLabel;
     }
 
     /**
@@ -287,6 +362,7 @@ public abstract class FormField {
         fieldLabel.setVisible(visible);
         fieldComponent.setVisible(visible);
         validationLabel.setVisible(visible);
+        helpLabel.setVisible(visible);
     }
 
     /**
@@ -299,6 +375,11 @@ public abstract class FormField {
         fieldLabel.setEnabled(enabled);
         fieldComponent.setEnabled(enabled);
         validationLabel.setEnabled(enabled);
+        helpLabel.setEnabled(enabled);
+    }
+
+    public boolean isEnabled() {
+        return isEnabled;
     }
 
     /**
@@ -334,6 +415,16 @@ public abstract class FormField {
      * GridBagConstraints object. You are likely better off going through the render()
      * method in FormPanel rather than manually rendering individual FormFields, but you
      * could use this to render a FormField into some other container if you need to.
+     * <p>
+     *     Note for those creating a new FormField implementation: the GridBagConstraints
+     *     object that you are given here is ready to go. You have two options
+     *     for gridx: FormPanel.LABEL_COLUMN and FormPanel.CONTROL_COLUMN. You should
+     *     avoid rendering into any other gridx value. You <b>can</b> increment
+     *     gridy if you really want a multi-row component, but beware that you
+     *     will likely have to handle the rendering of the "extra" labels (validation
+     *     and help) yourself. See the multi-line TextField implementation for
+     *     a reference.
+     * </p>
      *
      * @param container   The containing form panel.
      * @param constraints The GridBagConstraints object to use.
@@ -412,5 +503,4 @@ public abstract class FormField {
             action.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_FIRST, "valueChanged"));
         }
     }
-
 }

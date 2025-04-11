@@ -40,7 +40,7 @@ public class AboutPanel extends PanelBuilder {
         PanelField logoField = new PanelField();
         JPanel panel = logoField.getPanel();
         panel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        URL url = getClass().getResource("/images/swing-forms-logo.jpg");
+        URL url = getClass().getResource("/ca/corbett/swing-forms/images/swing-forms-logo.jpg");
         ImageIcon logoImage = new ImageIcon(url);
         JLabel imageLabel = new JLabel(logoImage);
         imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -48,15 +48,15 @@ public class AboutPanel extends PanelBuilder {
         aboutPanel.addFormField(logoField);
 
         String labelText = Version.FULL_NAME;
-        LabelField labelField = createSimpleLabelField(labelText);
+        LabelField labelField = new LabelField(labelText);
         labelField.setFont(new Font("SansSerif", Font.BOLD, 24));
         labelField.setLeftMargin(14);
         aboutPanel.addFormField(labelField);
 
-        labelField = createSimpleLabelField(Version.COPYRIGHT);
+        labelField = LabelField.createPlainHeaderLabel(Version.COPYRIGHT);
         labelField.setLeftMargin(14);
         aboutPanel.addFormField(labelField);
-        labelField = createSimpleLabelField(Version.PROJECT_URL);
+        labelField = LabelField.createPlainHeaderLabel(Version.PROJECT_URL);
         labelField.setLeftMargin(14);
         labelField.setBottomMargin(20);
         aboutPanel.addFormField(labelField);
@@ -70,7 +70,7 @@ public class AboutPanel extends PanelBuilder {
         textArea.setRows(16);
         textArea.setEditable(false);
         try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/LICENSE")));
+            BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/ca/corbett/swing-forms/LICENSE")));
             StringBuilder sb = new StringBuilder();
             String line;
             while ((line = in.readLine()) != null) {

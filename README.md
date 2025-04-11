@@ -13,7 +13,7 @@ With Maven, you can just list it as a dependency:
   <dependency>
     <groupId>ca.corbett</groupId>
     <artifactId>swing-forms</artifactId>
-    <version>1.9.0</version>
+    <version>1.9.1</version>
   </dependency>
 </dependencies>
 ```
@@ -223,33 +223,75 @@ in our custom Action to accomplish this!
 The included example FormField implementations will cover most simple form
 input requirements. But inevitably, you may require some new type of FormField
 to capture data that the built-in FormFields simply can't. For example,
-a FontChooser component that includes a dropdown for font name, a color chooser
-for font color, a number spinner for font point size, and some controls for
-bold/italic/underline. Can we do this with swing-forms? Yes we can!
+a FontChooser component that allows selection of font, size, style,
+and foreground/background color selection. Can we create a new custom form field
+to do this with swing-forms? Yes we can!
 
-![Custom font field](images/screenshot_customfield.jpg "Custom font field")
+![Custom font field](images/screenshot_customfield.jpg "Custom font field") ![Custom font dialog](images/screenshot_fontdialog.jpg "Custom font dialog")
 
 We start by extending the FormField class and adding all the class properties that
 we will need:
 
 ```java
-public class FontStyleField extends FormField {
+public final class FontField extends FormField {
 
-    public static final String[] fontFamilies = {"Serif", "SansSerif", "MonoSpaced"};
-    private JPanel wrapperPanel;
-    private JComboBox fontChooser;
-    private JToggleButton btnBold;
-    private JToggleButton btnItalic;
-    private JToggleButton btnUnderline;
-    private JPanel btnColor;
-    private JSpinner sizeSpinner;
+    private final JLabel sampleLabel;
+    private final JButton button;
+    private ActionListener actionListener;
+    private Font selectedFont;
+    private Color textColor;
+    private Color bgColor;
+    // ...
+}
 ```
 
-In this example, we are limiting user selection to `Serif`, `SansSerif`, or `MonoSpaced`, which
-are font families that are guaranteed by the JVM to be present at runtime. But, you
-could get much fancier with this if you want, and load all detected fonts from the
-user system or even load your own custom fonts into the list. Let's keep it simple for
-this example though.
+We can add some overloaded constructors to allow optionally setting an initial font, and optionally
+specifying a starting text color and background color. If the color properties aren't specified,
+we'll omit them from our font dialog and those properties won't be editable.
+
+We also need to create our font chooser popup dialog. This is actually fairly easy because it
+is in fact just another FormPanel! We can mostly use existing FormFields to create it. The exception
+is our font family list chooser. We probably don't want to use a combo box here, as the list of 
+installed system fonts might be quite large. It's easier to use a JList for this purpose, but we
+currently don't have a FormField that wraps JList, so we have to write some manual code here.
+Fortunately, it's not too difficult, as we can just wrap it in a PanelField:
+
+```java
+PanelField panelField = new PanelField();
+JPanel panel = panelField.getPanel();
+panel.setLayout(new BorderLayout());
+fontListModel = new DefaultListModel<>();
+fontList = new JList<>(fontListModel);
+fontList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+fontList.addListSelectionListener(e -> fontChanged());
+JScrollPane scrollPane = new JScrollPane(fontList);
+scrollPane.getVerticalScrollBar().setUnitIncrement(20);
+panel.add(scrollPane, BorderLayout.CENTER);
+formPanel.addFormField(panelField);
+```
+
+This is in fact why PanelField was created in the first place - to provide a way to wrap and house
+any arbitrary UI components that aren't currently wrapped up in their own FormField implementation.
+
+Okay, so we have an empty JList... how do we populate it with the list of fonts?
+
+```java
+switch (typeField.getSelectedIndex()) {
+    case 0: // built-in fonts
+      fontListModel.addAll(List.of(Font.SERIF, Font.SANS_SERIF, Font.MONOSPACED, Font.DIALOG, Font.DIALOG_INPUT));
+      // ...
+      break;
+      
+    case 1: // System fonts
+      fontListModel.addAll(Arrays.asList(GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames()));
+      // ...
+      break;
+}
+```
+
+The Java built-in fonts are those guaranteed to use by the JRE. These are the "safe" fonts.
+The system-installed fonts we can retrieve from the local graphics environment. This list may
+vary greatly from system to system and is beyond our control.
 
 The next important step is to implement the render() method so that the field can draw itself.
 Unfortunately, here we have to deal with GridBagLayout a little bit. But, swing-forms tries
@@ -257,115 +299,83 @@ to minimize this exposure by handing your method a GridBagConstraints object tha
 use as you go. Here's our render() method:
 
 ```java
-
 @Override
 public void render(JPanel container, GridBagConstraints constraints) {
-    constraints.gridy++;
-    constraints.gridx = FormPanel.LABEL_COLUMN;
-    constraints.insets = new Insets(topMargin, leftMargin, bottomMargin, componentSpacing);
-    fieldLabel.setFont(fieldLabelFont);
-    container.add(fieldLabel, constraints);
+  constraints.insets = new Insets(topMargin, leftMargin, bottomMargin, componentSpacing);
+  constraints.gridy++;
+  constraints.gridx = FormPanel.LABEL_COLUMN;
+  fieldLabel.setFont(fieldLabelFont);
+  container.add(fieldLabel, constraints);
 
-    constraints.gridx = FormPanel.CONTROL_COLUMN;
-    constraints.insets = new Insets(topMargin, componentSpacing, bottomMargin, componentSpacing);
-    container.add(wrapperPanel, constraints);
+  constraints.gridx = FormPanel.CONTROL_COLUMN;
+  button.setPreferredSize(new Dimension(95, 23));
+  button.setFont(selectedFont.deriveFont(12f));
+  JPanel wrapperPanel = new JPanel();
+  wrapperPanel.setBackground(container.getBackground());
+  wrapperPanel.setLayout(new BoxLayout(wrapperPanel, BoxLayout.X_AXIS));
+  wrapperPanel.add(sampleLabel);
+  wrapperPanel.add(new JLabel(" ")); // spacer
+  wrapperPanel.add(button);
 
-    constraints.gridx = FormPanel.VALIDATION_COLUMN;
-    constraints.insets = new Insets(0, 0, 0, rightMargin);
-    container.add(validationLabel, constraints);
+  if (actionListener != null) {
+    button.removeActionListener(actionListener);
+  }
+  actionListener = getActionListener(container);
+  button.addActionListener(actionListener); // UTIL-147 avoid adding it twice
+
+  constraints.fill = 0;
+  constraints.insets = new Insets(topMargin, componentSpacing, bottomMargin, componentSpacing);
+  container.add(wrapperPanel, constraints);
 }
 ```
 
 It is important to increment the `gridy` property straight away as we are starting a new
 row on the form. We can make use of the various `COLUMN` constants provided by the
 FormPanel class to control which component goes into which form column. Very basically,
-we have a form column for field labels, a form column for the field itself, and then a
-form column for the validation label. The validationLabel is given to us by the parent
-class, but we have to remember to add it in the `VALIDATION_COLUMN` so that it can appear
-when the FormPanel class validates this field.
+we have a form column for field labels and a form column for the field itself. Behind the
+scenes, there are some additional columns, but we rarely need to worry about them in 
+a FormField's render implementation (but we can if we need to). 
 
 We'll notice that the `CONTROL_COLUMN` here simply receives a `wrapperPanel`. What is this?
-We don't have a single control to display in this column, but rather we have several. But our
-FormPanel only has one column for field controls. So, we have to wrap our multiple controls
-into one containing panel, and then add that panel in the `CONTROL_COLUMN`. Okay, so how
-do we lay out our wrapper panel? We can do this in our constructor:
+We don't have a single control to display in this column, but rather we have two - our
+sample label and our action button. But our FormPanel only has one column for field controls. 
+So, we have to wrap our multiple controls into one containing panel, and then add that panel 
+in the `CONTROL_COLUMN`. This concept of wrapping multiple components into one wrapper
+is very handy for wrapping up multiple controls into a single FormField.
+
+We should also look at the ActionListener that we create for our button. It has to launch
+our FontDialog and update our field values as needed, based on what the user picked.
+Here we can also make use of the `fireValueChangedEvent()` method in the parent class:
 
 ```java
-fieldLabel = new JLabel(label);
-wrapperPanel = new JPanel();
-wrapperPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-fontChooser = new JComboBox(fontFamilies);
-fontChooser.setEditable(false);
-fontChooser.setSelectedIndex(selectedIndex);
-fontChooser.addItemListener(itemListener);
-wrapperPanel.add(fontChooser);
-btnColor = new JPanel();
-btnColor.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
-btnColor.setBackground(Color.BLACK);
-btnColor.setPreferredSize(new Dimension(24, 24));
-btnColor.addMouseListener(colorButtonMouseListener);
-wrapperPanel.add(btnColor);
-btnBold = new JToggleButton("B");
-btnBold.setPreferredSize(new Dimension(28, 28));
-btnBold.setFont(btnBold.getFont().deriveFont(Font.BOLD));
-btnBold.addChangeListener(fontButtonChangeListener);
-btnBold.setSelected(initialBold);
-wrapperPanel.add(btnBold);
-btnItalic = new JToggleButton("I");
-btnItalic.setPreferredSize(new Dimension(28, 28));
-btnItalic.setFont(btnItalic.getFont().deriveFont(Font.ITALIC));
-btnItalic.addChangeListener(fontButtonChangeListener);
-btnItalic.setSelected(initialItalic);
-wrapperPanel.add(btnItalic);
-btnUnderline = new JToggleButton("U");
-btnUnderline.setPreferredSize(new Dimension(28, 28));
-btnUnderline.addChangeListener(fontButtonChangeListener);
-btnUnderline.setSelected(initialUnderline);
-wrapperPanel.add(btnUnderline);
-sizeSpinner = new JSpinner(new SpinnerNumberModel(12, 8, 48, 2));
-wrapperPanel.add(sizeSpinner);
-fieldComponent = wrapperPanel;
-```
-
-This code is a little busy, but effectively we create all of our individual user
-controls and add them one by one to our wrapper panel. We end by assigning our
-wrapper panel to the parent class's fieldComponent property. This is a convenience
-that we can use later when using custom FieldValidators with this field.
-
-We probably also want to be able to respond to changes when our controls are modified.
-We can make use of the `fireValudChangedEvent()` method in the parent class. For
-example, we can add code to respond when our font size is changed:
-
-```java
-sizeSpinner.addChangeListener(new ChangeListener() {
+/**
+ * Creates and returns a new ActionListener suitable for our form field.
+ *
+ * @param panel The owning panel (used to position the popup dialog)
+ * @return An ActionListener that can be attached to a button.
+ */
+private ActionListener getActionListener(final JPanel panel) {
+  return new ActionListener() {
     @Override
-    public void stateChanged(ChangeEvent e) {
+    public void actionPerformed(ActionEvent e) {
+      FontDialog dialog = new FontDialog(panel, selectedFont, textColor, bgColor);
+      dialog.setVisible(true);
+      if (dialog.wasOkayed()) {
+        setSelectedFont(dialog.getSelectedFont());
+        setTextColor(dialog.getSelectedTextColor());
+        setBgColor(dialog.getSelectedBgColor());
         fireValueChangedEvent();
+      }
     }
-});
-```
-
-Trigging a value changed event will allow swing-forms to invoke any custom
-Actions that have been registered on our custom form field.
-
-And of course, we want our custom FormField to be able to be enabled and disabled.
-We can override the setEnabled method to do this, and pass it along to all of 
-our wrapped controls:
-
-```java
-@Override
-public void setEnabled(boolean enabled) {
-    super.setEnabled(enabled);
-    fontChooser.setEnabled(enabled);
-    btnBold.setEnabled(enabled);
-    btnItalic.setEnabled(enabled);
-    btnUnderline.setEnabled(enabled);
-    btnColor.setEnabled(enabled);
-    sizeSpinner.setEnabled(enabled);
+  };
 }
 ```
 
-The full code for `FontStyleField` is included in this library and in
+Triggering a value changed event will allow swing-forms to invoke any custom
+Actions that have been registered on our custom form field. This allows other fields
+to respond if they want to, based on whatever font the user has selected here.
+
+The full code for `FontField` is included in this library and in
 the demo application!
 
 ## License
@@ -377,3 +387,13 @@ swing-forms is made available under the MIT license: https://opensource.org/lice
 The swing-forms library was originally written in 2019 as part of the `sc-util` project but
 was not available on github until recently. Version `1.9.0` is the first publicly available
 version of the library.
+
+v1.9.1 [2025-05-10]
+- https://github.com/scorbo2/swing-forms/issues/1 - Replace FontStyleField with FontField, which is better
+- https://github.com/scorbo2/swing-forms/issues/2 - Add getFormField(id) to FormPanel
+- https://github.com/scorbo2/swing-forms/issues/3 - (bug) FieldField.setEnabled() not working properly
+- https://github.com/scorbo2/swing-forms/issues/4 - (bug) ComboField is using ItemListener carelessly
+- https://github.com/scorbo2/swing-forms/issues/5 - Add an optional "?" icon for help text to each field
+- https://github.com/scorbo2/swing-forms/issues/7 - PanelField should allow for validation
+- https://github.com/scorbo2/swing-forms/issues/8 - updated README instructional guide
+- https://github.com/scorbo2/swing-forms/issues/10 - FontField has optional size

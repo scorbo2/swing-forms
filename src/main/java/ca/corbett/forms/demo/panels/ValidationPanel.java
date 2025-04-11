@@ -35,17 +35,18 @@ public class ValidationPanel extends PanelBuilder {
     public JPanel build() {
         final FormPanel formPanel = new FormPanel();
 
-        LabelField headerLabel = createSimpleLabelField("Form validation is easy and extensible!");
+        LabelField headerLabel = new LabelField("Form validation is easy and extensible!");
         headerLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
-        headerLabel.setExtraMargins(24, 24);
+        headerLabel.setTopMargin(24);
+        headerLabel.setBottomMargin(24);
         formPanel.addFormField(headerLabel);
 
         String sb = "<html>Oops! Looks like there are form validation errors!<br/>" +
                 "No problem, just hover over the validation error<br/>" +
                 "markers to see what went wrong.</html>";
-        final LabelField warningLabel = createSimpleLabelField(sb);
+        final LabelField warningLabel = LabelField.createPlainHeaderLabel(sb);
 
-        final LabelField successLabel = createSimpleLabelField("Hooray! No validation errors to fix.");
+        final LabelField successLabel = LabelField.createPlainHeaderLabel("Hooray! No validation errors to fix.");
 
         final TextField textField = new TextField("Must be 3+ chars long: ", 15, 1, false);
         textField.setText("Example");

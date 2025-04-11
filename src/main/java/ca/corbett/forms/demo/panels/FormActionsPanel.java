@@ -36,9 +36,10 @@ public class FormActionsPanel extends PanelBuilder {
 
     @Override
     public JPanel build() {
-        LabelField headerLabel = createSimpleLabelField("Form fields can have customizable Actions:");
+        LabelField headerLabel = new LabelField("Form fields can have customizable Actions:");
         headerLabel.setFont(new Font("SansSerif", Font.BOLD, 18));
-        headerLabel.setExtraMargins(24, 24);
+        headerLabel.setTopMargin(24);
+        headerLabel.setBottomMargin(24);
         formPanel.addFormField(headerLabel);
 
         formPanel.addFormField(buildAlignmentChooser());
@@ -46,7 +47,7 @@ public class FormActionsPanel extends PanelBuilder {
         List<String> options = new ArrayList<>();
         options.add("This option has no extra settings");
         options.add("This option has 1 extra setting");
-        options.add("This option has log of extra settings");
+        options.add("This option has lot of extra settings");
         mainComboField = new ComboField("Show/hide extra fields:", options, 0, false);
         formPanel.addFormField(mainComboField);
 

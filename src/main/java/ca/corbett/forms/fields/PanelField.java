@@ -1,17 +1,24 @@
 package ca.corbett.forms.fields;
 
 import ca.corbett.forms.FormPanel;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 /**
  * A FormField that wraps and exposes a JPanel, into which callers can render
  * whatever extra custom components they want to display inline with the form.
- * The wrapped JPanel will span the width of the form, and will show no validation
- * label when the form is validated, as they do not respond to validation.
- * Note that PanelFields have no field label.
+ * The wrapped JPanel will span the width of the form.
+ * Note that PanelFields have no field label, but you can certainly
+ * add one yourself inside the panel, along with whatever else you need.
+ * <p>
+ *     By default, PanelFields do not show the validation label when
+ *     the form is validated. But if you add a FieldValidator
+ *     to your PanelField, then the validation label will appear
+ *     when the form is validated.
+ * </p>
  * 
  * @author scorbo2
  * @since 2020-09-27
@@ -27,7 +34,6 @@ public class PanelField extends FormField {
    */
   public PanelField() {
     fieldLabel = new JLabel();
-    validationLabel = new JLabel();
     showValidationLabel = false;
     panel = new JPanel();
     fieldComponent = panel;
@@ -55,7 +61,7 @@ public class PanelField extends FormField {
   public void render(JPanel container, GridBagConstraints constraints) {
     constraints.insets = new Insets(topMargin,leftMargin,bottomMargin,rightMargin);
     constraints.gridx = FormPanel.LABEL_COLUMN;
-    constraints.gridwidth = 3;
+    constraints.gridwidth = 2;
     constraints.fill = GridBagConstraints.BOTH;
     constraints.gridy = constraints.gridy + 1;
     constraints.weightx = 0.05;

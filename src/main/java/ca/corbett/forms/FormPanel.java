@@ -2,10 +2,13 @@ package ca.corbett.forms;
 
 import ca.corbett.forms.fields.FormField;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,11 +46,21 @@ public final class FormPanel extends JPanel {
         public boolean isTopAligned() {
             return this == TOP_LEFT || this == TOP_CENTER;
         }
+
+        public boolean isCentered() {
+            return this == CENTER_LEFT || this == CENTER;
+        }
     }
 
+    public static final URL helpImageUrl = FormPanel.class.getResource("/ca/corbett/swing-forms/images/formfield-help.png");
+
+    public static final int LEFT_SPACER_COLUMN = 0;
     public static final int LABEL_COLUMN = 1;
+    public static final int FORM_FIELD_START_COLUMN = LABEL_COLUMN;
     public static final int CONTROL_COLUMN = 2;
-    public static final int VALIDATION_COLUMN = 3;
+    public static final int HELP_COLUMN = 3;
+    public static final int VALIDATION_COLUMN = 4;
+    public static final int RIGHT_SPACER_COLUMN = 5;
 
     private final List<FormField> formFields;
     private Alignment alignment;
@@ -97,6 +110,25 @@ public final class FormPanel extends JPanel {
      */
     public List<FormField> getFormFields() {
         return new ArrayList<>(formFields);
+    }
+
+    /**
+     * Finds and returns a specific FormField by its identifier, if it exists.
+     * No validation of FormField.identifier is done in this class! If more than
+     * one FormField has the same identifier, this method will return whichever
+     * one it finds first. If a field does not have an identifier, it will not
+     * be considered by this method.
+     *
+     * @param identifier The field identifier to search for.
+     * @return A FormField matching that identifier, or null if not found.
+     */
+    public FormField getFormField(String identifier) {
+        for (FormField candidate : formFields) {
+            if (candidate.getIdentifier() != null && candidate.getIdentifier().equals(identifier)) {
+                return candidate;
+            }
+        }
+        return null;
     }
 
     /**
@@ -175,6 +207,13 @@ public final class FormPanel extends JPanel {
     }
 
     /**
+     * Returns the Alignment property of this FormPanel.
+     */
+    public Alignment getAlignment() {
+        return alignment;
+    }
+
+    /**
      * Renders this form panel by rendering each form field one by one.
      * This will clear the panel of any components from any previous render().
      */
@@ -193,16 +232,38 @@ public final class FormPanel extends JPanel {
                 JLabel spacer = new JLabel("");
                 constraints.fill = GridBagConstraints.BOTH;
                 constraints.weightx = 0.5;
+                constraints.gridx = LEFT_SPACER_COLUMN;
                 add(spacer, constraints);
                 constraints.fill = GridBagConstraints.NONE;
                 constraints.weightx = 0.0;
             }
 
-            constraints.gridx = 1;
+            // Tell the FormField to render itself starting in the FORM_FIELD_START_COLUMN:
+            constraints.gridx = FORM_FIELD_START_COLUMN;
             field.render(this, constraints);
+            constraints.gridwidth = 1;
+            constraints.fill = GridBagConstraints.NONE;
+
+            // Render the help label if the form field has help text:
+            if (!field.getHelpText().isBlank() && !field.isExtraLabelRenderedByField()) {
+                constraints.gridx = HELP_COLUMN;
+                constraints.insets = new Insets(field.getTopMargin(), field.getComponentSpacing(), field.getBottomMargin(), field.getComponentSpacing());
+                if (helpImageUrl != null) {
+                    field.getHelpLabel().setIcon(new ImageIcon(helpImageUrl));
+                }
+                field.getHelpLabel().setToolTipText(field.getHelpText());
+                add(field.getHelpLabel(), constraints);
+            }
+
+            // Render the validation label if the form field wants it:
+            if (field.getShowValidationLabel() && !field.isExtraLabelRenderedByField()) {
+                constraints.gridx = VALIDATION_COLUMN;
+                constraints.insets = new Insets(field.getTopMargin(), field.getComponentSpacing(), field.getBottomMargin(), field.getRightMargin());
+                add(field.getValidationLabel(), constraints);
+            }
 
             JLabel spacer = new JLabel("");
-            constraints.gridx = 4;
+            constraints.gridx = RIGHT_SPACER_COLUMN;
             constraints.weightx = 0.5;
             constraints.fill = GridBagConstraints.BOTH;
             add(spacer, constraints);
@@ -213,7 +274,7 @@ public final class FormPanel extends JPanel {
         // Add a spacer label to take up any remaining space in the GridBagLayout:
         constraints.gridy++;
         constraints.gridx = 0;
-        constraints.gridwidth = 3;
+        constraints.gridwidth = 6;
         constraints.fill = GridBagConstraints.BOTH;
         if (alignment.isTopAligned()) {
             constraints.weighty = 1; // Force the form to the top of the panel
