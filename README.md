@@ -1,4 +1,14 @@
-# swing-forms
+# swing-forms has moved!
+
+The swing-forms library has been absorbed into [swing-extras](https://github.com/scorbo2/swing-extras) as
+of the `2.0.0` release. **Any changes or enhancements to swing-forms will NOT be backported to this
+repo!** Instead, all new development for swing-forms will be done in the `swing-extras` library.
+
+The below documentation is left here for historical reasons. Have a nice day!
+
+--------------------
+
+## What is this?
 
 This is swing-forms, a simple Java Swing library I originally wrote back in 2019 for use in various
 side projects. It's proven useful to me a few times, mainly in saving me from having to write a lot
